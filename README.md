@@ -7,7 +7,7 @@ A Discord bot that posts periodic system health updates (CPU, RAM, Disk usage) t
 - Periodic updates to a specified Discord channel
 - Alerts for high CPU, memory, or disk usage
 - Configurable thresholds
-- Uses a separate logging script for performance and simplicity
+- Uses a separate logging script
 
 ## Setup
 
@@ -27,7 +27,7 @@ In `bot.py`, update the following:
 
 1. Run `logger.py` to periodically collect system stats.
 2. Run `bot.py` to start the Discord bot.
-3. (Optional) Schedule `logger.py` to run at intervals using `cron`, Task Scheduler, or a loop.
+3. Optionally schedule `logger.py` to run at intervals using `cron`, Task Scheduler, or a loop.
 
 ## File Descriptions
 
