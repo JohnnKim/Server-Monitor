@@ -1,39 +1,41 @@
+import psutil
 import discord
 from discord.ext import commands, tasks
-import json
-import os
+from datetime import datetime
 
-TOKEN = "YOUR_DISCORD_BOT_TOKEN"  # Replace with bot's token
-CHANNEL_ID = 123456789012345678   # Replace with target channel ID
-LOG_FILE = "server_health_log.json"
-INTERVAL_SECONDS = 300  # interval in seconds
+# Config
+TOKEN = "YOUR_DISCORD_BOT_TOKEN"  # Replace with your actual bot token
+CHANNEL_ID = 123456789012345678   # Replace with your target Discord channel ID
+INTERVAL_SECONDS = 300            # Send update every 5 minutes
 
-# Thresholds for warnings
+# Warning thresholds
 CPU_WARN = 85.0
 MEM_WARN = 90.0
 DISK_WARN = 90.0
 
+# Discord bot setup
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-def read_latest_snapshot():
+# Health Snapshot
+def get_health_snapshot():
     """
-    Reads the latest snapshot from the log file.
-    Returns the most recent data entry as a dictionary.
+    Collect and return current system health metrics.
+    - CPU usage (%)
+    - Memory usage (%)
+    - Disk usage (%)
     """
-    if not os.path.exists(LOG_FILE):
-        return None
-    with open(LOG_FILE, "r") as f:
-        data = json.load(f)
-        if data:
-            return data[-1]
-    return None
+    return {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "cpu_percent": psutil.cpu_percent(interval=1),
+        "memory_percent": psutil.virtual_memory().percent,
+        "disk_percent": psutil.disk_usage("/").percent
+    }
 
 def get_status_color(cpu, mem, disk):
     """
-    Determines the color and warning messages for the embed
-    based on current system metrics and thresholds.
-    Returns a tuple: (color, list of warning strings)
+    Determines embed color and warning messages based on thresholds.
+    Returns a tuple: (discord.Color, list of warning strings)
     """
     warnings = []
     if cpu >= CPU_WARN:
@@ -47,31 +49,24 @@ def get_status_color(cpu, mem, disk):
         return discord.Color.red(), warnings
     return discord.Color.green(), ["All systems normal"]
 
+# Bot events
 @bot.event
 async def on_ready():
-    """
-    Called when the bot has successfully connected.
-    Starts the health reporting task.
-    """
     print(f"Logged in as {bot.user.name}")
     health_ping.start()
 
+# Health Report
 @tasks.loop(seconds=INTERVAL_SECONDS)
 async def health_ping():
     """
-    Scheduled task that reads the latest system health snapshot
-    and sends it as an embed message to the configured channel.
+    Runs every INTERVAL_SECONDS to check system health and send a report.
     """
     channel = bot.get_channel(CHANNEL_ID)
     if not channel:
         print("Channel not found.")
         return
 
-    snapshot = read_latest_snapshot()
-    if not snapshot:
-        await channel.send("No health data available.")
-        return
-
+    snapshot = get_health_snapshot()
     cpu = snapshot["cpu_percent"]
     mem = snapshot["memory_percent"]
     disk = snapshot["disk_percent"]
@@ -86,5 +81,5 @@ async def health_ping():
 
     await channel.send(embed=embed)
 
-# Run
+# run bot
 bot.run(TOKEN)
