@@ -1,5 +1,9 @@
 # Server Health Monitor
 
+[![Downloads](https://img.shields.io/github/downloads/JohnnKim/Server-Monitor/total.svg)](https://github.com/JohnnKim/Server-Monitor/releases)
+[![Repo Size](https://img.shields.io/github/repo-size/JohnnKim/Server-Monitor.svg)](https://github.com/JohnnKim/Server-Monitor)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A Discord bot for monitoring the health of your personal server or PC.
 
 It reports CPU, RAM, and disk usage at specified intervals, and includes basic moderation and control commands like `!ping`, `!uptime`, `!top`, `!shutdown`, and `!restart`.
