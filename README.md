@@ -1,31 +1,60 @@
 # Server Health Monitor
 
-A simple Discord bot that reports CPU, memory, and disk usage from a personal server or PC at regular intervals. 
+A Discord bot for monitoring the health of your personal server or PC.
 
-Also includes moderation commands like !ping, !uptime, !top, !shutdown, and !restart.
+It reports CPU, RAM, and disk usage at specified intervals, and includes basic moderation and control commands like `!ping`, `!uptime`, `!top`, `!shutdown`, and `!restart`.
+
+---
 
 ## Setup
 
 1. Install dependencies:
    pip install -r requirements.txt
 
-2. Open server_monitor_bot.py:
-   - Set your bot token
-   - Set the channel ID
-   - Optionally configure thresholds and interval
+2. Create a `.env` file in the root directory (same level as `health_bot.py`):
 
-3. Run the bot:
-   python server_monitor_bot.py
+   DISCORD_TOKEN=your_bot_token_here
+   CHANNEL_ID=123456789012345678
+
+   - DISCORD_TOKEN is your bot's secret token from the Discord Developer Portal.
+   - CHANNEL_ID is the numeric ID of the channel where health reports will be sent.
+
+3. Run the bot manually:
+   python health_bot.py
+
+   Or compile to an `.exe` for standalone use.
+
+---
 
 ## How It Works
 
-The bot collects system stats using psutil and sends a snapshot to a Discord channel at a fixed interval. 
-It displays potential warnings when CPU, memory, or disk usage exceeds configured thresholds. 
+- The bot uses `psutil` to collect system health data and sends periodic updates to a Discord channel.
+- Warnings are shown when CPU, memory, or disk usage exceeds configured thresholds.
+- Built-in commands:
+  - !ping – Check if the bot is alive
+  - !uptime – Display how long the system has been running
+  - !top – Show the top CPU-consuming processes
+  - !shutdown – Shut down the system (admin only)
+  - !restart – Restart the system (admin only)
 
-Additional commands provide control and visibility into the system, including uptime tracking, active process usage, and optional shutdown or restart functionality.
+---
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.8 or higher
 - discord.py >= 2.3.0
 - psutil >= 5.9.0
+- python-dotenv
+
+Install with:
+   pip install -r requirements.txt
+
+---
+
+## Security Disclaimer
+
+This bot includes commands that can shut down or restart your machine. It is meant for private/local use only.
+
+NEVER share or commit your `.env` file. Treat your DISCORD_TOKEN as a secret key, anyone with it can control your bot and potentially your system.
+
+If distributing the bot, make sure the token is only used on trusted machines and servers.
