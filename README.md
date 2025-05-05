@@ -28,26 +28,48 @@ It reports CPU, RAM, and disk usage at specified intervals, and includes basic m
 
 ## How It Works
 
-- The bot uses `psutil` to collect system health data and sends periodic updates to a Discord channel.
-- Warnings are shown when CPU, memory, or disk usage exceeds configured thresholds.
-- Built-in commands:
-  - !ping – Check if the bot is alive
-  - !uptime – Display how long the system has been running
-  - !top – Show the top CPU-consuming processes
-  - !shutdown – Shut down the system (admin only)
-  - !restart – Restart the system (admin only)
+- Uses `psutil` to monitor:
+  - CPU usage (%)
+  - Memory usage (%)
+  - Disk usage (%)
+
+- Sends a report to your configured Discord channel every `60` seconds.
+
+- Provides a **live dashboard** at `http://localhost:5000/dashboard`  
+  → Includes labeled charts with color-coded usage levels (green/yellow/red).
+
+- Thresholds:
+  - CPU ≥ 85%
+  - Memory ≥ 90%
+  - Disk ≥ 90%
+
+---
+
+## Commands
+
+| Command     | Description                                |
+|-------------|--------------------------------------------|
+| `!ping`     | Check if the bot is online                 |
+| `!uptime`   | Get system uptime                          |
+| `!top`      | List top CPU-consuming processes           |
+| `!shutdown` | Shut down the system (admin only)          |
+| `!restart`  | Restart the system (admin only)            |
+| `!net`      | Show network traffic and connections       |
 
 ---
 
 ## Requirements
 
-- Python 3.8 or higher
-- discord.py >= 2.3.0
-- psutil >= 5.9.0
-- python-dotenv
+- Python 3.8+
+- `discord.py` ≥ 2.3.0
+- `psutil` ≥ 5.9.0
+- `python-dotenv`
+- `flask` (for dashboard)
 
-Install with:
-   pip install -r requirements.txt
+Install all dependencies:
+```
+pip install -r requirements.txt
+```
 
 ---
 
