@@ -32,4 +32,4 @@ jobs:
       with:
         files: dist/health_bot_${{ github.ref_name }}.exe
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
